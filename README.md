@@ -86,3 +86,8 @@ expect(x).to be(1) # x.equal?(1)
 - if we want to be exact, we can use to be(true) or to be(false)
 - we can specifically use **to be_nil** to check whether it is nil or not
 
+## Numeric Comparison Matchers
+- we can use to be > 99 or even to be eq(100)
+- we can use to be_between(3, 5).inclusive or to be_between(3, 5).exclusive to specify a range
+- we can use to be_within(5).of(10) => meaning that from 5 - 15 it will return true
+- we can use (1..10).to cover(3) to check whether a range cover the value
