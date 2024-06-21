@@ -48,3 +48,34 @@ end
 
 # Running specs
 > rspec 01.car_project/spec/car_spec.rb 
+
+# Matchers in RSpec
+
+## Equivalence matchers
+- note that == is actually close enough, it is loosely equality, but for .eql, it has a stronger restriction - it is for value equality, and .equal is for indentity quality:
+```bash
+x = 1   #true
+
+x == 1  # true
+x == 1.0  # true
+x == '1'  #false
+
+x.eql?(1) # true
+x.eql?(1.0) # false
+x.eql?('1') # false
+
+x = 'Lynda'
+x == 'Lynda' # true
+x.eql?('Lynda') # true
+x.equal?('Lynda') # false
+```
+
+- common equivalence matchers:
+```bash
+x = 1
+expect(x).to eq(1) # x == 1, most common
+expect(x).to be == 1 # x == 1
+expect(x).to eql(1) # x.eql?(1)
+expect(x).to equal(1) # x.equal?(1), rare
+expect(x).to be(1) # x.equal?(1)
+```
