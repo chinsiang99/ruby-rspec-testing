@@ -79,3 +79,10 @@ expect(x).to eql(1) # x.eql?(1)
 expect(x).to equal(1) # x.equal?(1), rare
 expect(x).to be(1) # x.equal?(1)
 ```
+
+## Truthiness Matchers
+- we can use matchers like **to be_truthy** or to **be_falsy** to have testing matchers
+- note that *truthy* and *falsy* is actually loosely equivalent
+- if we want to be exact, we can use to be(true) or to be(false)
+- we can specifically use **to be_nil** to check whether it is nil or not
+
