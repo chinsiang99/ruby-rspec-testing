@@ -120,3 +120,34 @@ expect(hash).to include(:city, :state)
 expect(hash).to include(:city => 'Dallas', :state => 'TX')
 expect(hash).to include(:city => 'Dallas')
 ```
+
+## Other useful matchers
+
+### Regular Expression Matchers
+- it only works with strings
+```bash
+string = 'Lydia'
+expect(string).to match(/^L.a+$/)
+
+# only work with string
+expect('123').to match(/\d{3}/)
+expect(123).not_to match(/\d{3}/)
+```
+
+### Object type Matcher
+- **be_a / be_an**: Checks if an object is an instance of a class..
+- **be_kind_of**: Checks if an object is an instance of a class or its subclass.
+
+### Attributes Matcher
+- **have_attributes**: Checks if an object has specified attributes with certain values.
+
+### Satisfy Matcher
+- The **satisfy** matcher in RSpec is a **flexible matcher** that allows you to pass a **custom block** to specify more complex or unique conditions that an object must meet. This matcher is particularly useful **when none of the built-in matchers quite fit your needs**.
+- example:
+```bash
+RSpec.describe 'satisfy matcher' do
+  it 'checks if a number is even and greater than 10' do
+    expect(12).to satisfy { |value| value.even? && value > 10 }
+  end
+end
+```
