@@ -91,3 +91,32 @@ expect(x).to be(1) # x.equal?(1)
 - we can use to be_between(3, 5).inclusive or to be_between(3, 5).exclusive to specify a range
 - we can use to be_within(5).of(10) => meaning that from 5 - 15 it will return true
 - we can use (1..10).to cover(3) to check whether a range cover the value
+
+## Collections Matchers
+- there are a bunch of matchers to work with collections
+- example: 
+```bash
+array = [1,2,3]
+expect(array).to include(3)
+expect(array).to include(2,3)
+expect(array).to start_with(1)
+expect(array).to end_with(3)
+
+# match_array: same elements in any order
+expect(array).to match_array([3,2,1])
+
+# contain_exactly: uses individual args
+expect(array).to contain_exactly(1,3,2)
+
+string = 'Lydia'
+expect(string).to include('Ly')
+expect(string).to include('Ly', 'da')
+expect(string).to start_with('Ly')
+expect(string).to end_with('da')
+
+hash = {:city => 'Dallas', :state => 'TX'}
+expect(hash).to include(:city)
+expect(hash).to include(:city, :state)
+expect(hash).to include(:city => 'Dallas', :state => 'TX')
+expect(hash).to include(:city => 'Dallas')
+```
