@@ -46,3 +46,5 @@ end
 - fundamental structure of RSpec
 ![RSpec hierarchy](rspec-hierarchy.png)
 
+# Running specs
+> rspec 01.car_project/spec/car_spec.rb 
