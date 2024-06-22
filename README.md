@@ -151,3 +151,11 @@ RSpec.describe 'satisfy matcher' do
   end
 end
 ```
+
+## Predicate Matchers
+- all question mark methods can actually been used with matchers
+- example:
+    - expect(123).to be_integer => supposingly is 123.integer?
+    - 123.nil?
+- besides, we can match custom methods as well, example:
+    - to be_visible
