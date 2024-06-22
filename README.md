@@ -159,3 +159,52 @@ end
     - 123.nil?
 - besides, we can match custom methods as well, example:
     - to be_visible
+
+## Observation Matchers
+- we instead use block of codes to do it, example:
+```bash
+array = []
+expect {array << 1}.to change(array, :empty?).from(true).to(false)
+# calls :empty? before and after the block
+
+expect do
+    bob.first_name  = 'Robert'
+    bob.last_name  = 'Smith'
+end.to change(bob, :full_name).from('Bob Smith').to('Robert Smith')
+
+x = 10
+expect { x+=1 }.to change{x}.from(10).to(1)
+expect {x+=1}. to change{x % 3}.from(2).to(0)
+```
+- we can observe errors as well other than observing values, example:
+```bash
+expect {customer.delete}.to raise_error
+expect {customer.delete}.to raise_exception
+
+expect {1/10}.to raise_error(ZeroDivisionError)
+expect {1/10}.to raise_error.with_message("divided by 0")
+expect {1/10}.to raise_error.with_message(/divided/)
+```
+- other than that, we can observe output as well, example:
+```bash
+expect {print "Hello"}.to output.to_stdout
+expect {print "Hello"}.to output("Hello").to_stdout
+expect {print "Hello"}.to output(/ll/).to_stdout
+expect {warn "Hello"}.to output(/llo/).to_stderr
+```
+
+## Compund expectation
+- example of complex expectation:
+```bash
+s = 'Lynda'
+expect(s).to start_with('L').and end_with('a')
+expect(s.length).to be_even.or be < 6
+expect(s).to start_with('L') & end_with('a')
+expect(s.length).to be_even | be < 6
+
+array = [1,2,3]
+expect(array).to all(be < 5)
+expect(@items).to all(be_visible & be_in_stock)
+```
+- example of noun-phrase aliases for matchers
+![noun-phrase](noun-phrase.png)
