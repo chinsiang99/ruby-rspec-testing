@@ -335,3 +335,68 @@ RSpec.describe Car do
 end
 ```
 
+## Shared Examples
+- Shared examples in RSpec allow you to define a set of tests that can be reused across multiple contexts or example groups. This is particularly useful when you have common behavior that you want to ensure across different classes or instances.
+
+### Defining Shared Examples
+You define shared examples using the RSpec.shared_examples method (or shared_examples_for), providing a name and a block of code containing the tests.
+
+```bash
+RSpec.shared_examples "a vehicle" do
+  it "has wheels" do
+    expect(subject.wheels).to be > 0
+  end
+
+  it "has an engine" do
+    expect(subject).to respond_to(:engine)
+  end
+end
+```
+
+### Using Shared Examples
+You include shared examples in your example groups using the include_examples or it_behaves_like methods.
+```bash
+class Car
+  attr_accessor :wheels, :engine
+
+  def initialize
+    @wheels = 4
+    @engine = "V8"
+  end
+end
+
+RSpec.describe Car do
+  subject { Car.new }
+
+  it_behaves_like "a vehicle"
+end
+```
+
+### Example Scenario
+Let's say you have different types of vehicles (e.g., Car, Truck) that share some common behavior, such as having wheels and an engine. You can define shared examples to test this common behavior and then include these examples in the tests for both Car and Truck.
+
+### Example with Parameters
+- Shared examples can also take parameters to make them more flexible.
+```bash
+RSpec.shared_examples "a vehicle with parameters" do |wheels, engine_type|
+  it "has the correct number of wheels" do
+    expect(subject.wheels).to eq(wheels)
+  end
+
+  it "has the correct engine type" do
+    expect(subject.engine).to eq(engine_type)
+  end
+end
+
+RSpec.describe Car do
+  subject { Car.new }
+
+  include_examples "a vehicle with parameters", 4, "V8"
+end
+
+RSpec.describe Truck do
+  subject { Truck.new }
+
+  include_examples "a vehicle with parameters", 6, "Diesel"
+end
+```
