@@ -208,3 +208,14 @@ expect(@items).to all(be_visible & be_in_stock)
 ```
 - example of noun-phrase aliases for matchers
 ![noun-phrase](noun-phrase.png)
+
+# Using Hooks
+- with the benefits of DRY
+- use instance variables to make objects available to examples
+- **customer** is local variable and will not be available
+- **@customer** is an instance variable and will be available
+- before hooks
+- after hooks
+- around hooks
+- example usage of hooks:
+![alt text](before-hooks.png)
