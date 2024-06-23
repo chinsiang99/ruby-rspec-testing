@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require_relative '../../lib/support/number_helper'
+
 describe 'NumberHelper' do
 
   include NumberHelper
