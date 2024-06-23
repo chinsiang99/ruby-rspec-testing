@@ -219,3 +219,37 @@ expect(@items).to all(be_visible & be_in_stock)
 - around hooks
 - example usage of hooks:
 ![alt text](before-hooks.png)
+
+# Using the let method
+- The let method in RSpec is used to define **memoized** helper methods. It's a way to create variables that are **lazily evaluated**, meaning the value is calculated the first time it is accessed, and that value is **cached** for subsequent access within the same example.
+- example:
+```bash
+class Person
+  attr_accessor :name, :age
+
+  def initialize(name, age)
+    @name = name
+    @age = age
+  end
+
+  def adult?
+    @age >= 18
+  end
+end
+
+RSpec.describe Person do
+  let(:person) { Person.new("Alice", 25) }
+
+  it 'checks if person is an adult' do
+    expect(person.adult?).to be true
+  end
+
+  it 'checks the name of the person' do
+    expect(person.name).to eq("Alice")
+  end
+
+  it 'checks the age of the person' do
+    expect(person.age).to eq(25)
+  end
+end
+```
