@@ -209,7 +209,9 @@ expect(@items).to all(be_visible & be_in_stock)
 - example of noun-phrase aliases for matchers
 ![noun-phrase](noun-phrase.png)
 
-# Using Hooks
+# Testing Efficiency
+
+## Using Hooks
 - with the benefits of DRY
 - use instance variables to make objects available to examples
 - **customer** is local variable and will not be available
@@ -220,7 +222,7 @@ expect(@items).to all(be_visible & be_in_stock)
 - example usage of hooks:
 ![alt text](before-hooks.png)
 
-# Using the let method
+## Using the let method
 - The let method in RSpec is used to define **memoized** helper methods. It's a way to create variables that are **lazily evaluated**, meaning the value is calculated the first time it is accessed, and that value is **cached** for subsequent access within the same example.
 - example:
 ```bash
@@ -253,3 +255,83 @@ RSpec.describe Person do
   end
 end
 ```
+
+## Setting a subject
+- The let and subject methods in RSpec are both used to define memoized helper methods, but they serve slightly different purposes and have different conventions for use. Here's a detailed comparison to help understand their differences, benefits, and appropriate use cases.
+
+### let
+Purpose: Defines a memoized helper method for auxiliary objects or values used in tests.
+Evaluation: Lazily evaluated—computed the first time it is accessed in a test, and the value is cached for the rest of the test.
+Naming: Typically used for objects or values that support the main object under test.
+```bash
+RSpec.describe Person do
+  let(:young_person) { Person.new("Bob", 16) }
+
+  it 'returns false for a minor' do
+    expect(young_person.adult?).to be false
+  end
+end
+```
+
+### subject
+Purpose: Defines the primary object under test. This is the object that the example group is focused on.
+Evaluation: Lazily evaluated, like let, but can also be eagerly evaluated with subject!.
+Naming: Usually named to reflect the primary focus of the tests. If unnamed, it defaults to an instance of the described class.
+```bash
+RSpec.describe Person do
+  subject(:person) { Person.new("Alice", 25) }
+
+  it 'has the correct name' do
+    expect(person.name).to eq("Alice")
+  end
+end
+```
+
+### Key Differences
+1. Primary vs. Auxiliary:
+- subject: Used for the primary object under test.
+- let: Used for auxiliary objects or values that support the tests.
+
+2. Implicit Naming:
+- subject: If unnamed, defaults to an instance of the described class.
+- let: Always requires a name.
+
+3. Contextual Meaning:
+- subject: Indicates the main focus of the test.
+- let: Provides support objects or values for the test.
+
+- example of using them:
+```bash
+class Car
+  attr_accessor :make, :model, :engine
+
+  def initialize(make, model, engine)
+    @make = make
+    @model = model
+    @engine = engine
+  end
+end
+
+class Engine
+end
+
+RSpec.describe Car do
+  subject(:car) { Car.new("Toyota", "Camry", engine) }
+  let(:engine) { Engine.new }
+
+  describe 'attributes' do
+    it 'has the correct make' do
+      expect(car.make).to eq("Toyota")
+    end
+
+    it 'has the correct model' do
+      expect(car.model).to eq("Camry")
+    end
+
+    it 'has an engine' do
+      expect(car.engine).to be(engine)
+    end
+  end
+end
+```
+
