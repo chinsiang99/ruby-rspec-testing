@@ -400,3 +400,141 @@ RSpec.describe Truck do
   include_examples "a vehicle with parameters", 6, "Diesel"
 end
 ```
+
+# Test Doubles
+- an object that stands in for another object
+- similar to a stand-in or body double for an actor/actress
+- doubles, mocks, stubs, fakes, spies, dummies
+
+## Why use test doubles?
+- real object is difficult or "expensive" to work with
+- a simpler version will serve our purpose just as well
+- responses are unpredictable
+- having fixed, expected responses makes testing easier
+
+## Definitions
+- Double/mock: a simple object programmed with expectations and responses as preparations for the calls it will receive
+- Stub: an instruction to an object to return a specific response to a method call
+
+## Using Mocks and Stubs
+
+- Mocks and stubs are fundamental concepts in testing, especially in behavior-driven development (BDD) frameworks like RSpec. They help isolate the code under test, making it easier to test specific behaviors without relying on real objects or external dependencies.
+
+### Stubs
+- Stubs are used to provide **predetermined responses** to **method calls**. They are useful when you want to isolate the behavior of the method you are testing from other methods or when interacting with external services or systems.
+
+- Usage
+1. Define a Stub: Use allow to define a stub.
+2. Control Return Values: Specify what a method should return when it is called.
+- example:
+```bash
+class User
+  def initialize(name)
+    @name = name
+  end
+
+  def greet
+    "Hello, #{@name}"
+  end
+
+  def time_sensitive_greet
+    if Time.now.hour < 12
+      "Good morning, #{@name}"
+    else
+      "Good afternoon, #{@name}"
+    end
+  end
+end
+
+RSpec.describe User do
+  let(:user) { User.new("Alice") }
+
+  it 'greets the user' do
+    expect(user.greet).to eq("Hello, Alice")
+  end
+
+  it 'greets the user based on time' do
+    allow(Time).to receive(:now).and_return(Time.new(2024, 6, 21, 9, 0, 0)) # Stub the current time
+    expect(user.time_sensitive_greet).to eq("Good morning, Alice")
+  end
+end
+```
+
+### Mocks
+- Mocks are similar to stubs but with additional functionality. Mocks can also set expectations about method calls, such as how many times a method should be called and with what arguments. They are useful for verifying interactions between objects.
+
+- Usage
+1. Define a Mock: Use expect to define a mock.
+2. Set Expectations: Specify how the object should be used in terms of method calls and arguments.
+
+- example:
+```bash
+class Order
+  def initialize(payment_gateway)
+    @payment_gateway = payment_gateway
+  end
+
+  def place_order(amount)
+    @payment_gateway.charge(amount)
+  end
+end
+
+class PaymentGateway
+  def charge(amount)
+    # Implementation for charging the amount
+  end
+end
+
+RSpec.describe Order do
+  let(:payment_gateway) { instance_double("PaymentGateway") }
+  let(:order) { Order.new(payment_gateway) }
+
+  it 'charges the correct amount' do
+    expect(payment_gateway).to receive(:charge).with(100)
+    order.place_order(100)
+  end
+end
+```
+
+### combining mocks and stubs
+```bash
+class Order
+  def initialize(payment_gateway)
+    @payment_gateway = payment_gateway
+  end
+
+  def place_order(amount)
+    if @payment_gateway.has_funds?(amount)
+      @payment_gateway.charge(amount)
+    else
+      raise "Insufficient funds"
+    end
+  end
+end
+
+class PaymentGateway
+  def has_funds?(amount)
+    # Check for funds
+  end
+
+  def charge(amount)
+    # Charge the amount
+  end
+end
+
+RSpec.describe Order do
+  let(:payment_gateway) { instance_double("PaymentGateway") }
+  let(:order) { Order.new(payment_gateway) }
+
+  it 'charges the amount if funds are available' do
+    allow(payment_gateway).to receive(:has_funds?).with(100).and_return(true)
+    expect(payment_gateway).to receive(:charge).with(100)
+    order.place_order(100)
+  end
+
+  it 'raises an error if funds are not available' do
+    allow(payment_gateway).to receive(:has_funds?).with(100).and_return(false)
+    expect { order.place_order(100) }.to raise_error("Insufficient funds")
+  end
+end
+```
