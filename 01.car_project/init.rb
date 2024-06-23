@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative('car')
+require_relative('lib/car')
 
 puts
 puts "Enter information for the car you want to purchase."
